@@ -7,7 +7,9 @@ Welcome to MemU! This guide will help you add robust long-term memory capabiliti
 Before we begin, ensure you have the following:
 
 -   **Python 3.13+**: MemU takes advantage of modern Python features.
--   **OpenAI API Key**: This quickstart uses OpenAI's models (`gpt-4o-mini`). You will need a valid API key.
+-   **LLM Provider** (choose one):
+    -   **OpenAI API Key**: For cloud-based inference with OpenAI's models (`gpt-4o-mini`)
+    -   **Ollama**: For local, privacy-focused inference without API costs
 
 ## Step-by-Step Guide
 
@@ -21,9 +23,13 @@ pip install memu
 uv add memu
 ```
 
-### 2. Configuration
+### 2. LLM Provider Setup
 
-MemU requires an LLM backend to function. By default, it looks for the `OPENAI_API_KEY` environment variable.
+MemU requires an LLM backend to function. You can choose between cloud-based (OpenAI) or local (Ollama) inference.
+
+#### Option A: OpenAI (Cloud-Based)
+
+MemU looks for the `OPENAI_API_KEY` environment variable.
 
 **Linux / macOS / Git Bash:**
 ```bash
@@ -35,9 +41,45 @@ export OPENAI_API_KEY=sk-proj-your-api-key
 $env:OPENAI_API_KEY="sk-proj-your-api-key"
 ```
 
+#### Option B: Ollama (Local, Privacy-First)
+
+For local inference without API costs or internet dependency:
+
+1. **Install Ollama**:
+```bash
+# Linux / macOS
+curl -fsSL https://ollama.ai/install.sh | sh
+
+# Windows: Download from https://ollama.ai
+```
+
+2. **Pull a model**:
+```bash
+# Lightweight model (recommended for getting started)
+ollama pull llama2
+
+# Or a more capable model
+ollama pull mistral
+```
+
+3. **Verify Ollama is running**:
+```bash
+# Should return a list of installed models
+curl http://localhost:11434/api/tags
+```
+
+4. **Set environment variable**:
+```bash
+# Linux / macOS
+export OLLAMA_API_BASE_URL=http://localhost:11434/api
+
+# Windows (PowerShell)
+$env:OLLAMA_API_BASE_URL="http://localhost:11434/api"
+```
+
 ### 3. The Robust Starter Script
 
-Below is a complete, production-ready script that demonstrates the full lifecycle of a memory-enabled agent: **Initialization**, **Injection** (adding memory), and **Retrieval** (searching memory).
+Below is a complete, production-ready script that demonstrates the full lifecycle of a memory-enabled agent: **Initialization**, **Injection** (adding memory), and **Retrieval** (searching memory). The script automatically detects whether you're using OpenAI or Ollama.
 
 Create a file named `getting_started.py` and paste the following code:
 
@@ -46,13 +88,19 @@ Create a file named `getting_started.py` and paste the following code:
 Getting Started with MemU: A Robust Example.
 
 This script demonstrates the core lifecycle of MemU:
-1.  **Initialization**: Setting up the client with secure API key handling.
+1.  **Initialization**: Auto-detecting and configuring LLM provider (OpenAI or Ollama).
 2.  **Memory Injection**: Adding a specific memory with metadata.
 3.  **Retrieval**: Searching for that memory using natural language.
 4.  **Error Handling**: Catching common configuration issues.
 
 Usage:
+    # Option 1: With OpenAI
     export OPENAI_API_KEY=your_api_key_here
+    python getting_started.py
+
+    # Option 2: With Ollama (local)
+    ollama pull llama2
+    export OLLAMA_API_BASE_URL=http://localhost:11434/api
     python getting_started.py
 """
 
@@ -73,28 +121,56 @@ async def main() -> None:
     print(">>> MemU Getting Started Example")
     print("-" * 30)
 
-    # 1. API Key Handling
-    # MemU relies on an LLM backend (defaulting to OpenAI).
-    # We ensure the API key is present before proceeding.
-    api_key = os.getenv("OPENAI_API_KEY")
-    if not api_key:
-        print("[!] Error: OPENAI_API_KEY environment variable is not set.")
-        print("Please export it: export OPENAI_API_KEY=sk-...")
-        return
+    # 1. LLM Provider Detection
+    # MemU supports both OpenAI (cloud) and Ollama (local).
+    # We detect which provider is configured and use it.
+    openai_key = os.getenv("OPENAI_API_KEY")
+    ollama_url = os.getenv("OLLAMA_API_BASE_URL", "http://localhost:11434/api")
+
+    # Determine which provider to use
+    if openai_key:
+        provider = "openai"
+        model_name = "gpt-4o-mini"
+        llm_config = {
+            "api_key": openai_key,
+            "chat_model": model_name,
+        }
+        print(f"[*] Using OpenAI with model: {model_name}...")
+    else:
+        # Check if Ollama is available
+        try:
+            import httpx
+            response = httpx.get(f"{ollama_url}/tags", timeout=5.0)
+            if response.status_code == 200:
+                provider = "ollama"
+                model_name = "llama2"  # Default model
+                llm_config = {
+                    "client_backend": "ollama",
+                    "base_url": ollama_url,
+                    "chat_model": model_name,
+                    "embed_model": model_name,
+                }
+                print(f"[*] Using Ollama (local) with model: {model_name}...")
+            else:
+                print("[!] Error: No LLM provider configured.")
+                print("Please either:")
+                print("  1. Set OPENAI_API_KEY: export OPENAI_API_KEY=sk-...")
+                print("  2. Or install Ollama: curl -fsSL https://ollama.ai/install.sh | sh")
+                return
+        except Exception:
+            print("[!] Error: No LLM provider configured.")
+            print("Please either:")
+            print("  1. Set OPENAI_API_KEY: export OPENAI_API_KEY=sk-...")
+            print("  2. Or install Ollama: curl -fsSL https://ollama.ai/install.sh | sh")
+            return
 
     try:
         # 2. Initialization
         # We initialize the MemoryService with:
-        # - llm_profiles: Configuration for the LLM (model, api_key).
+        # - llm_profiles: Configuration for the LLM (model, api_key or Ollama endpoint).
         # - memorize_config: Pre-defining a memory category ensures we can organize memories efficiently.
-        print(f"[*] Initializing MemoryService with model: gpt-4o-mini...")
         service = MemoryService(
-            llm_profiles={
-                "default": {
-                    "api_key": api_key,
-                    "chat_model": "gpt-4o-mini",
-                },
-            },
+            llm_profiles={"default": llm_config},
             memorize_config={
                 "memory_categories": [
                     {
@@ -152,29 +228,61 @@ if __name__ == "__main__":
 
 ### Understanding the Code
 
-1.  **Initialization**: We configure `MemoryService` with specific `llm_profiles`. This tells MemU which model to use. We also define a `memorize_config` with a "User Facts" category. Categories help the LLM organize and retrieve information more effectively.
-2.  **Memory Injection**: `create_memory_item` is used to explicitly add a piece of knowledge. We tag it with `memory_type="profile"` to semantically indicate this is a user attribute.
-3.  **Retrieval**: We use `retrieve` with a natural language query. MemU's internal workflow ("RAG" or "LLM" based) will determine the best way to find relevant memories.
+1.  **Provider Detection**: The script automatically detects which LLM provider is available:
+    - First checks for `OPENAI_API_KEY` to use OpenAI's cloud service
+    - Falls back to Ollama if available at `OLLAMA_API_BASE_URL`
+    - Provides helpful error messages if neither is configured
+2.  **Initialization**: We configure `MemoryService` with `llm_profiles` specific to your provider. We also define a `memorize_config` with a "User Facts" category. Categories help the LLM organize and retrieve information more effectively.
+3.  **Memory Injection**: `create_memory_item` is used to explicitly add a piece of knowledge. We tag it with `memory_type="profile"` to semantically indicate this is a user attribute.
+4.  **Retrieval**: We use `retrieve` with a natural language query. MemU's internal workflow ("RAG" or "LLM" based) will determine the best way to find relevant memories.
 
 ## Troubleshooting
 
-### `[!] Error: OPENAI_API_KEY environment variable is not set.`
+### `[!] Error: No LLM provider configured.`
 
-This is the most common issue. It means the script cannot find your API key which is required to communicate with OpenAI.
+This means the script cannot detect either OpenAI or Ollama configuration.
 
 **Solution:**
-Ensure you have exported the key in your **current terminal session**.
--   **Windows PowerShell**: `$env:OPENAI_API_KEY="sk-..."`
--   **Linux/Mac**: `export OPENAI_API_KEY=sk-...`
 
-Also, verify that you didn't accidentally include spaces around the `=` sign in bash.
+**Option 1: Use OpenAI (Cloud)**
+Ensure you have exported your API key in your **current terminal session**:
+-   **Linux/Mac**: `export OPENAI_API_KEY=sk-...`
+-   **Windows PowerShell**: `$env:OPENAI_API_KEY="sk-..."`
+
+Verify you didn't accidentally include spaces around the `=` sign in bash.
+
+**Option 2: Use Ollama (Local)**
+1. Install Ollama: `curl -fsSL https://ollama.ai/install.sh | sh`
+2. Pull a model: `ollama pull llama2`
+3. Verify it's running: `curl http://localhost:11434/api/tags`
+4. Set the environment variable:
+   - **Linux/Mac**: `export OLLAMA_API_BASE_URL=http://localhost:11434/api`
+   - **Windows PowerShell**: `$env:OLLAMA_API_BASE_URL="http://localhost:11434/api"`
+
+### Ollama-Specific Issues
+
+**Ollama returns connection errors:**
+- Verify Ollama is running: `ollama list`
+- Check the API is accessible: `curl http://localhost:11434/api/tags`
+- Ensure firewall allows connections on port 11434
+
+**Ollama is slow or times out:**
+- Use a smaller model: `ollama pull llama2` (7B) instead of `llama2:13b`
+- Check system resources: Ollama needs 8GB+ RAM for most models
+- Enable GPU acceleration if available (automatic on compatible systems)
+
+**Model not found errors:**
+- List installed models: `ollama list`
+- Pull the required model: `ollama pull llama2`
+- Update the `chat_model` in the script to match your installed model
 
 ## Next Steps
 
 Now that you have the basics running, consider exploring:
 -   **Core Concepts**: Learn about `MemoryService`, `MemoryItem`, and `MemoryCategory`.
--   **Advanced Configuration**: Switch to local LLMs or use different vector stores.
--   **Integrations**: Connect MemU to your existing agent framework.
+-   **Production Deployment**: See the [Rocket.Chat Bot Example](../examples/rocketchat_bot_ollama.md) for deploying a memory-enabled bot with Ollama.
+-   **Advanced Configuration**: Switch between LLM providers or use different vector stores.
+-   **Other Examples**: Check out the `examples/` directory for conversation memory, skill extraction, and multimodal use cases.
 
 ## Community Resources
 
