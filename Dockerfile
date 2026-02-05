@@ -32,10 +32,14 @@ RUN maturin build --release --out target/wheels && \
 # Stage 2: Runtime image
 FROM python:3.13-slim-bookworm
 
+# Install curl for healthchecks
+RUN apt-get update && apt-get install -y --no-install-recommends curl && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 
-# Copy installed packages from builder stage
+# Copy installed packages and binaries from builder stage
 COPY --from=builder /usr/local/lib/python3.13/site-packages /usr/local/lib/python3.13/site-packages
+COPY --from=builder /usr/local/bin /usr/local/bin
 COPY --from=builder /app/src /app/src
 COPY --from=builder /app/pyproject.toml /app/uv.lock /app/Cargo.toml /app/Cargo.lock ./
 
