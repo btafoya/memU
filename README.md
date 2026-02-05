@@ -344,18 +344,91 @@ pip install -e .
 pip install -e ".[postgres,langgraph]"
 ```
 
-#### Basic Example
+#### Configuration
 
-> **Requirements**: Python 3.13+ and an OpenAI API key OR Ollama
+Before running memU, configure your environment variables. You have several options:
 
-**Test Continuous Learning** (in-memory):
+**Option 1: Environment Variables** (Quick testing):
 ```bash
-export OPENAI_API_KEY=your_api_key
+# For OpenAI
+export OPENAI_API_KEY=sk-your-key-here
+
+# For Ollama (local)
+export OLLAMA_API_BASE_URL=http://localhost:11434/api
+
+# For OpenRouter
+export OPENROUTER_API_KEY=your-key-here
+export OPENROUTER_BASE_URL=https://openrouter.ai/api/v1
+
+# For PostgreSQL (if using persistent storage)
+export MEMU_DB_URL=postgresql+psycopg://user:password@localhost:5432/memu_db
+```
+
+**Option 2: .env File** (Recommended for development):
+```bash
+# Create .env file
+cat > .env << EOF
+# Choose your LLM provider (pick one):
+OPENAI_API_KEY=sk-your-key-here
+# OR
+OLLAMA_API_BASE_URL=http://localhost:11434/api
+# OR
+OPENROUTER_API_KEY=your-key-here
+OPENROUTER_BASE_URL=https://openrouter.ai/api/v1
+
+# Database (optional, defaults to in-memory)
+MEMU_DB_URL=postgresql+psycopg://user:password@localhost:5432/memu_db
+
+# Resource limits (optional)
+MEMU_MEMORY_LIMIT=2g
+DB_MEMORY_LIMIT=1g
+EOF
+```
+
+**Available Environment Variables**:
+
+| Variable | Required | Description | Default |
+|----------|----------|-------------|---------|
+| `OPENAI_API_KEY` | No* | OpenAI API key | None |
+| `OLLAMA_API_BASE_URL` | No* | Ollama endpoint | `http://localhost:11434/api` |
+| `OPENROUTER_API_KEY` | No* | OpenRouter API key | None |
+| `OPENROUTER_BASE_URL` | No | OpenRouter endpoint | `https://openrouter.ai/api/v1` |
+| `MEMU_DB_URL` | No | PostgreSQL connection URL | In-memory storage |
+| `POSTGRES_DB` | No | Database name | `memu_db` |
+| `POSTGRES_USER` | No | Database user | `postgres` |
+| `POSTGRES_PASSWORD` | No | Database password | None |
+| `MEMU_MEMORY_LIMIT` | No | Container memory limit | `2g` |
+| `DB_MEMORY_LIMIT` | No | Database memory limit | `1g` |
+
+\* At least one LLM provider (OpenAI, Ollama, or OpenRouter) is required.
+
+#### Quick Start Examples
+
+**Example 1: With Ollama (Local, No API Key)**:
+```bash
+# Install and start Ollama
+curl -fsSL https://ollama.ai/install.sh | sh
+ollama pull llama2
+
+# Set environment
+export OLLAMA_API_BASE_URL=http://localhost:11434/api
+
+# Run example
+cd examples
+python example_6_ollama_memory.py
+```
+
+**Example 2: With OpenAI**:
+```bash
+# Set environment
+export OPENAI_API_KEY=sk-your-key-here
+
+# Run in-memory test
 cd tests
 python test_inmemory.py
 ```
 
-**Test with Persistent Storage** (PostgreSQL):
+**Example 3: With PostgreSQL (Persistent Storage)**:
 ```bash
 # Start PostgreSQL with pgvector
 docker run -d \
@@ -366,18 +439,21 @@ docker run -d \
   -p 5432:5432 \
   pgvector/pgvector:pg16
 
-# Run continuous learning test
-export OPENAI_API_KEY=your_api_key
+# Set environment
+export OPENAI_API_KEY=sk-your-key-here
+export MEMU_DB_URL=postgresql+psycopg://postgres:postgres@localhost:5432/memu
+
+# Run persistent storage test
 cd tests
 python test_postgres.py
 ```
 
-Both examples demonstrate **proactive memory workflows**:
+All examples demonstrate **proactive memory workflows**:
 1. **Continuous Ingestion**: Process multiple files sequentially
 2. **Auto-Extraction**: Immediate memory creation
 3. **Proactive Retrieval**: Context-aware memory surfacing
 
-See [`tests/test_inmemory.py`](tests/test_inmemory.py) and [`tests/test_postgres.py`](tests/test_postgres.py) for implementation details.
+See [`examples/`](examples/) directory for more examples.
 
 ---
 
