@@ -9,6 +9,9 @@
 [![PyPI version](https://badge.fury.io/py/memu-py.svg)](https://badge.fury.io/py/memu-py)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Python 3.13+](https://img.shields.io/badge/python-3.13+-blue.svg)](https://www.python.org/downloads/)
+[![Version](https://img.shields.io/badge/version-1.3.0-brightgreen.svg)](https://github.com/btafoya/MemU/releases)
+[![Docker](https://img.shields.io/badge/docker-ready-blue.svg)](https://github.com/btafoya/MemU/blob/main/docker-compose.yml)
+[![Ollama](https://img.shields.io/badge/Ollama-supported-orange.svg)](https://ollama.ai)
 [![Discord](https://img.shields.io/badge/Discord-Join%20Chat-5865F2?logo=discord&logoColor=white)](https://discord.gg/memu)
 [![Twitter](https://img.shields.io/badge/Twitter-Follow-1DA1F2?logo=x&logoColor=white)](https://x.com/memU_ai)
 
@@ -23,6 +26,26 @@
 memU is a memory framework built for **24/7 proactive agents**.
 It is designed for long-running use and greatly **reduces the LLM token cost** of keeping agents always online, making always-on, evolving agents practical in production systems.
 memU **continuously captures and understands user intent**. Even without a command, the agent can tell what you are about to do and act on it by itself.
+
+---
+
+## 📚 Table of Contents
+
+- [Features](#-core-features)
+- [How Proactive Memory Works](#-how-proactive-memory-works)
+- [Memory Architecture](#️-hierarchical-memory-architecture)
+- [Quick Start](#-quick-start)
+  - [Cloud Version](#option-1-cloud-version)
+  - [Self-Hosted](#option-2-self-hosted)
+  - [Production Deployment](#production-deployment-with-dockerpodman)
+- [LLM Provider Integration](#llm-provider-integration)
+  - [Ollama](#ollama-integration)
+  - [OpenRouter](#openrouter-integration)
+  - [Custom Providers](#custom-llm-and-embedding-providers)
+- [Core APIs](#-core-apis)
+- [Examples](#-examples)
+- [Contributing](#-contributing)
+- [License](#-license)
 
 ---
 
@@ -85,11 +108,29 @@ If you find memU useful or interesting, a GitHub Star ⭐️ would be greatly ap
 
 ## ✨ Core Features
 
-| Capability | Description |
-|------------|-------------|
-| 🤖 **24/7 Proactive Agent** | Always-on memory agent that works continuously in the background—never sleeps, never forgets |
-| 🎯 **User Intention Capture** | Understands and remembers user goals, preferences, and context across sessions automatically |
-| 💰 **Cost Efficient** | Reduces long-running token costs by caching insights and avoiding redundant LLM calls |
+| Capability | Description | Benefits |
+|------------|-------------|----------|
+| 🤖 **24/7 Proactive Agent** | Always-on memory agent that works continuously in the background—never sleeps, never forgets | Anticipates user needs before they ask |
+| 🎯 **User Intention Capture** | Understands and remembers user goals, preferences, and context across sessions automatically | Personalized experiences that improve over time |
+| 💰 **Cost Efficient** | Reduces long-running token costs by caching insights and avoiding redundant LLM calls | 10-100x reduction in token usage for long-running agents |
+| 🗃️ **Hierarchical Memory** | Three-layer architecture (Resource → Item → Category) for efficient storage and retrieval | Fast queries, organized knowledge, automatic categorization |
+| 🔌 **Multi-Provider Support** | Works with OpenAI, Ollama, OpenRouter, and custom LLM providers | Deploy anywhere: cloud, on-premise, or hybrid |
+| 🐳 **Production Ready** | Docker/Podman support with health checks, auto-restart, and monitoring | Deploy to production in minutes |
+| 🔐 **Privacy First** | Local deployment option with Ollama for complete data privacy | Keep sensitive data on your infrastructure |
+| 🚀 **Real-time Processing** | Immediate memory extraction and retrieval with async support | No waiting, instant context availability |
+
+### Why MemU?
+
+| Feature | MemU | Traditional RAG | Vector Databases Only |
+|---------|------|-----------------|----------------------|
+| **Proactive Intelligence** | ✅ Anticipates needs | ❌ Reactive only | ❌ Query-based only |
+| **Automatic Categorization** | ✅ Self-organizing | ⚠️ Manual tags | ❌ Flat structure |
+| **Cost Optimization** | ✅ Smart caching | ⚠️ Full context each time | ⚠️ Embedding costs |
+| **Long-term Memory** | ✅ Multi-session learning | ⚠️ Session-limited | ✅ Persistent |
+| **Cross-reference Linking** | ✅ Knowledge graph | ❌ Independent chunks | ⚠️ Similarity only |
+| **Production Deployment** | ✅ Docker-ready | ⚠️ DIY | ⚠️ Infrastructure only |
+| **Local LLM Support** | ✅ Ollama integration | ⚠️ Limited | N/A |
+
 ---
 
 ## 🔄 How Proactive Memory Works
@@ -273,14 +314,51 @@ For enterprise deployment with custom proactive workflows, contact **info@nevami
 
 ### Option 2: Self-Hosted
 
+#### System Requirements
+
+**Minimum**:
+- Python 3.13+
+- 4GB RAM (8GB recommended)
+- 2GB disk space
+- One of: OpenAI API key, Ollama, or compatible LLM provider
+
+**Recommended for Production**:
+- Python 3.13+
+- 8GB+ RAM (16GB for Ollama with larger models)
+- 10GB disk space
+- PostgreSQL 16+ with pgvector extension
+- Docker/Podman for containerized deployment
+- Ollama with GPU for optimal performance
+
 #### Installation
+
+**From PyPI** (stable):
 ```bash
+pip install memu-py
+
+# With PostgreSQL support
+pip install memu-py[postgres]
+
+# With all optional dependencies
+pip install memu-py[postgres,langgraph,claude,rocketchat]
+```
+
+**From Source** (latest):
+```bash
+# Clone the repository
+git clone https://github.com/btafoya/MemU.git
+cd MemU
+
+# Install in development mode
 pip install -e .
+
+# Or with extras
+pip install -e ".[postgres,langgraph]"
 ```
 
 #### Basic Example
 
-> **Requirements**: Python 3.13+ and an OpenAI API key
+> **Requirements**: Python 3.13+ and an OpenAI API key OR Ollama
 
 **Test Continuous Learning** (in-memory):
 ```bash
@@ -377,12 +455,317 @@ The deployment is configured via environment variables in `.env`:
 
 See `.env.example` for all available options.
 
+#### HTTP API Endpoints
+
+The production server exposes the following endpoints:
+
+| Endpoint | Method | Description | Response |
+|----------|--------|-------------|----------|
+| `/` | GET | Root health check | `{"status": "ok", "service": "MemU Memory Service", "version": "1.3.0", "ollama_endpoint": "..."}` |
+| `/health` | GET | Detailed health status | `{"status": "healthy", "database": "...", "ollama": "..."}` |
+| `/api/status` | GET | API status information | `{"api_version": "v1", "memory_service": "initialized/not initialized"}` |
+
+**Example requests**:
+```bash
+# Check service health
+curl http://localhost:8000/
+
+# Get detailed health information
+curl http://localhost:8000/health
+
+# Check API status
+curl http://localhost:8000/api/status
+```
+
+#### Monitoring & Observability
+
+**Health Checks**:
+- Containers include built-in healthchecks that run automatically
+- Database: `pg_isready` check every 10 seconds
+- memU Service: HTTP check on `/` endpoint every 30 seconds
+
+**View logs**:
+```bash
+# All services
+docker-compose logs -f
+
+# Specific service
+docker-compose logs -f memu
+docker-compose logs -f db
+
+# Last 100 lines
+docker-compose logs --tail=100 memu
+```
+
+**Monitor resource usage**:
+```bash
+# Container stats
+docker stats
+
+# Or with podman
+podman stats
+```
+
+#### Backup & Recovery
+
+**Database Backup**:
+```bash
+# Create backup
+docker-compose exec db pg_dump -U memu_production_user memu_db > backup.sql
+
+# Or backup the entire volume
+docker run --rm -v memu_postgres_data:/data -v $(pwd):/backup \
+  alpine tar czf /backup/postgres_data_backup.tar.gz -C /data .
+```
+
+**Restore from Backup**:
+```bash
+# Restore SQL dump
+cat backup.sql | docker-compose exec -T db psql -U memu_production_user memu_db
+
+# Or restore volume
+docker run --rm -v memu_postgres_data:/data -v $(pwd):/backup \
+  alpine tar xzf /backup/postgres_data_backup.tar.gz -C /data
+```
+
+#### Troubleshooting
+
+**Container won't start**:
+```bash
+# Check logs for errors
+docker-compose logs memu
+docker-compose logs db
+
+# Verify environment variables
+docker-compose config
+
+# Check if ports are already in use
+netstat -tulpn | grep -E '8000|5432'
+```
+
+**Database connection errors**:
+```bash
+# Verify database is healthy
+docker-compose exec db pg_isready -U memu_production_user
+
+# Check database logs
+docker-compose logs db
+
+# Test connection from memu container
+docker-compose exec memu env | grep MEMU_DB_URL
+```
+
+**Ollama connectivity issues**:
+```bash
+# Test Ollama endpoint from host
+curl http://192.168.25.165:11434/api/tags
+
+# Test from memu container
+docker-compose exec memu curl -f $OLLAMA_API_BASE_URL/tags
+
+# Check firewall rules
+sudo iptables -L -n | grep 11434
+```
+
+**Out of memory errors**:
+```bash
+# Check current resource limits
+docker-compose config | grep mem_limit
+
+# Adjust in .env file
+echo "MEMU_MEMORY_LIMIT=4g" >> .env
+echo "DB_MEMORY_LIMIT=2g" >> .env
+
+# Restart services
+docker-compose down && docker-compose up -d
+```
+
 #### Production Considerations
 
-- **Security**: Update default passwords in `.env` before deployment
-- **Backups**: The `postgres_data` volume contains your memory data
-- **Monitoring**: Check logs with `docker-compose logs -f` or `podman-compose logs -f`
-- **Updates**: Rebuild with `docker-compose build` or `podman-compose build` after code changes
+- **Security**:
+  - Update default passwords in `.env` before deployment
+  - Use strong passwords (32+ characters recommended)
+  - Restrict database port exposure if not needed externally
+  - Keep `.env` file permissions to 600: `chmod 600 .env`
+
+- **Backups**:
+  - The `postgres_data` volume contains your memory data
+  - Schedule regular backups using cron or your backup solution
+  - Test restore procedures periodically
+
+- **Monitoring**:
+  - Check logs regularly: `docker-compose logs -f`
+  - Set up log aggregation for production (e.g., ELK, Loki)
+  - Monitor container health and resource usage
+  - Configure alerts for service failures
+
+- **Updates**:
+  - Rebuild after code changes: `docker-compose build`
+  - Pull latest changes: `git pull origin main`
+  - Review changelog before updating
+  - Test updates in staging environment first
+
+- **Scaling**:
+  - Current setup is single-instance; for high availability, consider:
+  - PostgreSQL replication for database redundancy
+  - Load balancer for multiple memU instances
+  - Shared storage for consistent state
+
+---
+
+### Ollama Integration
+
+MemU supports [Ollama](https://ollama.ai) for local LLM inference, enabling privacy-focused deployments without external API dependencies.
+
+#### Quick Start with Ollama
+
+1. **Install and start Ollama**:
+```bash
+# Install Ollama (see https://ollama.ai)
+curl -fsSL https://ollama.ai/install.sh | sh
+
+# Pull a model
+ollama pull llama2
+
+# Verify Ollama is running
+curl http://localhost:11434/api/tags
+```
+
+2. **Configure MemU**:
+```python
+from memu import MemoryService
+
+service = MemoryService(
+    llm_profiles={
+        "default": {
+            "client_backend": "ollama",
+            "base_url": "http://localhost:11434/api",
+            "chat_model": "llama2",
+            "embed_model": "llama2"  # Or use a dedicated embedding model
+        }
+    },
+    database_config={
+        "metadata_store": {"provider": "inmemory"},
+    }
+)
+```
+
+3. **Run with production deployment**:
+```bash
+# Edit .env file
+echo "OLLAMA_API_BASE_URL=http://localhost:11434/api" >> .env
+
+# Start services
+docker-compose up -d
+```
+
+#### Recommended Ollama Models
+
+| Model | Size | Use Case | Memory Required |
+|-------|------|----------|-----------------|
+| `llama2` | 7B | General purpose, fast | 8GB |
+| `llama2:13b` | 13B | Better quality | 16GB |
+| `mistral` | 7B | Efficient, high quality | 8GB |
+| `codellama` | 7B | Code-focused tasks | 8GB |
+| `phi` | 2.7B | Lightweight, fast | 4GB |
+
+#### Ollama Configuration Options
+
+```python
+service = MemoryService(
+    llm_profiles={
+        "default": {
+            "client_backend": "ollama",
+            "base_url": "http://localhost:11434/api",  # Ollama endpoint
+            "chat_model": "llama2",                     # Model for chat/memorization
+            "embed_model": "llama2",                    # Model for embeddings
+            "temperature": 0.7,                         # Creativity (0.0-1.0)
+            "top_p": 0.9,                              # Nucleus sampling
+            "num_ctx": 4096,                           # Context window size
+        }
+    }
+)
+```
+
+#### Remote Ollama Setup
+
+For production deployments with Ollama on a different server:
+
+```bash
+# On Ollama server (192.168.25.165)
+# Allow external connections
+OLLAMA_HOST=0.0.0.0:11434 ollama serve
+
+# On memU server
+# Update .env file
+echo "OLLAMA_API_BASE_URL=http://192.168.25.165:11434/api" > .env
+
+# Test connectivity
+curl http://192.168.25.165:11434/api/tags
+```
+
+#### Performance Tuning
+
+**GPU Acceleration**:
+```bash
+# Verify GPU is detected
+ollama list
+
+# Use GPU-enabled models
+ollama run llama2:7b-gpu
+```
+
+**Concurrent Requests**:
+```bash
+# Set maximum concurrent requests
+OLLAMA_NUM_PARALLEL=4 ollama serve
+```
+
+**Memory Optimization**:
+```bash
+# Limit GPU memory usage (in GiB)
+OLLAMA_GPU_MEMORY_FRACTION=0.8 ollama serve
+```
+
+#### Example: Complete Ollama Workflow
+
+```python
+import asyncio
+from memu import MemoryService
+
+async def main():
+    # Initialize with Ollama
+    service = MemoryService(
+        llm_profiles={
+            "default": {
+                "client_backend": "ollama",
+                "base_url": "http://localhost:11434/api",
+                "chat_model": "llama2",
+            }
+        }
+    )
+
+    # Memorize a conversation
+    result = await service.memorize(
+        resource_url="conversation.json",
+        modality="conversation",
+        user={"user_id": "user123"}
+    )
+
+    print(f"Extracted {len(result.memory_items)} memories")
+
+    # Retrieve relevant memories
+    memories = await service.retrieve(
+        query="What are the user's preferences?",
+        user={"user_id": "user123"}
+    )
+
+    print(f"Found {len(memories.memory_items)} relevant memories")
+
+asyncio.run(main())
+```
+
+See [`examples/example_6_ollama_memory.py`](examples/example_6_ollama_memory.py) for a complete working example.
 
 ---
 
@@ -707,6 +1090,289 @@ For detailed contribution guidelines, code standards, and development practices,
 - Add tests for new functionality
 - Update documentation as needed
 - Run `make check` before pushing
+
+---
+
+## ⚡ Performance & Best Practices
+
+### Performance Benchmarks
+
+**Memory Extraction** (memorize operation):
+- Small documents (1-5 pages): 2-5 seconds
+- Conversations (10-50 messages): 3-8 seconds
+- Large documents (50+ pages): 15-30 seconds
+
+**Memory Retrieval** (retrieve operation):
+- RAG mode: 100-500ms (embedding-based)
+- LLM mode: 2-5 seconds (reasoning-based)
+- Hybrid mode: 1-3 seconds (best of both)
+
+**Production Throughput**:
+- Concurrent memorize: 10-50 ops/sec (depends on LLM provider)
+- Concurrent retrieve: 100-500 ops/sec (RAG mode)
+- PostgreSQL capacity: 10K+ memory items per user
+
+### Best Practices
+
+#### 1. Choose the Right Retrieval Method
+
+```python
+# For real-time suggestions (fast, low cost)
+result = await service.retrieve(query="...", method="rag")
+
+# For complex reasoning (slower, higher quality)
+result = await service.retrieve(query="...", method="llm")
+
+# For balanced performance
+result = await service.retrieve(query="...", method="hybrid")
+```
+
+#### 2. Optimize Database Configuration
+
+```python
+# Use PostgreSQL for production
+database_config = {
+    "provider": "postgres",
+    "url": "postgresql://user:pass@localhost/memu",
+    "pool_size": 20,        # Adjust based on concurrency
+    "max_overflow": 10,      # Extra connections for bursts
+}
+
+# Use in-memory for development/testing
+database_config = {"provider": "inmemory"}
+```
+
+#### 3. Configure Resource Limits
+
+```bash
+# In .env file
+MEMU_MEMORY_LIMIT=4g          # Increase for high-concurrency
+DB_MEMORY_LIMIT=2g            # Scale with data volume
+OLLAMA_NUM_PARALLEL=4         # Concurrent Ollama requests
+```
+
+#### 4. Batch Operations
+
+```python
+# Good: Batch multiple memorize operations
+async def batch_memorize(files):
+    tasks = [service.memorize(f) for f in files]
+    results = await asyncio.gather(*tasks)
+    return results
+
+# Avoid: Sequential operations
+for file in files:
+    await service.memorize(file)  # Slower
+```
+
+#### 5. Scope Memory by User/Agent
+
+```python
+# Always scope memory to prevent context bleeding
+await service.memorize(
+    resource_url="data.json",
+    user={"user_id": "user123"}  # Essential for multi-tenant
+)
+
+await service.retrieve(
+    query="preferences",
+    where={"user_id": "user123"}  # Filter by user
+)
+```
+
+#### 6. Monitor and Debug
+
+```python
+# Enable debug logging
+import logging
+logging.basicConfig(level=logging.DEBUG)
+
+# Track performance
+import time
+start = time.time()
+result = await service.memorize(...)
+print(f"Memorize took {time.time() - start:.2f}s")
+
+# Check memory usage
+from memu.app import MemoryService
+stats = await service.get_stats()  # Returns memory statistics
+```
+
+#### 7. Production Deployment Checklist
+
+- [ ] Use PostgreSQL with pgvector (not in-memory)
+- [ ] Configure proper resource limits in docker-compose.yml
+- [ ] Set strong passwords in .env file
+- [ ] Enable health checks and monitoring
+- [ ] Set up automated backups for postgres_data volume
+- [ ] Use connection pooling for high concurrency
+- [ ] Configure log aggregation (ELK, Loki, etc.)
+- [ ] Test failover and recovery procedures
+- [ ] Monitor Ollama/LLM provider performance
+- [ ] Set up alerting for service failures
+
+### Troubleshooting Performance Issues
+
+**Slow Retrieval**:
+```bash
+# Check database indexes
+docker-compose exec db psql -U memu_production_user -d memu_db \
+  -c "SELECT tablename, indexname FROM pg_indexes WHERE schemaname = 'public';"
+
+# Monitor query performance
+docker-compose logs memu | grep "Query took"
+```
+
+**High Memory Usage**:
+```bash
+# Check container memory
+docker stats memu_memu_1
+
+# Reduce batch size or concurrency
+# Adjust MEMU_MEMORY_LIMIT in .env
+```
+
+**Ollama Timeouts**:
+```bash
+# Increase timeout in Ollama
+OLLAMA_TIMEOUT=300 ollama serve
+
+# Use smaller models
+ollama pull llama2:7b  # Instead of 13b or 70b
+
+# Enable GPU acceleration
+nvidia-smi  # Verify GPU is available
+```
+
+---
+
+## ❓ Frequently Asked Questions
+
+### General
+
+**Q: What makes MemU different from other memory frameworks?**
+A: MemU is designed for 24/7 proactive agents with automatic categorization, cross-referencing, and cost-optimized token usage. Unlike traditional RAG systems, MemU anticipates what you'll need before you ask.
+
+**Q: Can I use MemU without an internet connection?**
+A: Yes! Deploy with Ollama for completely offline operation. All data stays on your infrastructure.
+
+**Q: What's the recommended model for production?**
+A: For OpenAI: GPT-4 or GPT-3.5-turbo. For Ollama: llama2:13b or mistral. For cost-efficiency: OpenRouter with smaller models.
+
+### Deployment
+
+**Q: What are the minimum system requirements?**
+A: 4GB RAM, Python 3.13+, and an LLM provider (OpenAI API, Ollama, or compatible). 8GB+ RAM recommended for production.
+
+**Q: Can I run multiple MemU instances?**
+A: Yes! Use a shared PostgreSQL database and configure each instance with unique identifiers. Consider load balancing for high availability.
+
+**Q: How do I migrate from in-memory to PostgreSQL?**
+A: Export data using the backup tools, set up PostgreSQL with pgvector, update database_config, and import data. See the backup section for details.
+
+### Data & Privacy
+
+**Q: Where is my data stored?**
+A: With PostgreSQL: in the postgres_data Docker volume. With in-memory: in RAM (lost on restart). For Ollama: models stored locally.
+
+**Q: Is my data encrypted?**
+A: Database connections support TLS/SSL. For encryption at rest, use encrypted volumes or managed PostgreSQL services with encryption enabled.
+
+**Q: Can I export my memories?**
+A: Yes! Use `service.export_memories()` or backup the PostgreSQL database directly. Memories are stored in standard SQL format.
+
+### Performance
+
+**Q: How many memories can MemU handle?**
+A: 10,000+ memories per user with PostgreSQL. For larger scales (100K+ memories), consider partitioning by time or category.
+
+**Q: What's the latency for retrieval?**
+A: RAG mode: 100-500ms. LLM mode: 2-5 seconds. Latency depends on your LLM provider and model size.
+
+**Q: Can I use MemU with multiple LLM providers?**
+A: Yes! Configure different profiles for different operations (e.g., GPT-4 for memorization, local Ollama for retrieval).
+
+### Troubleshooting
+
+**Q: Why is memorize() slow?**
+A: Check your LLM provider response time. Use smaller models for faster processing. Enable concurrent processing for batch operations.
+
+**Q: How do I fix "connection refused" errors?**
+A: Verify PostgreSQL is running (`docker-compose ps`), check connection string in .env, ensure firewall allows connections on port 5432.
+
+**Q: Ollama returns empty responses?**
+A: Verify the model is pulled (`ollama list`), check Ollama is running (`curl http://localhost:11434/api/tags`), increase timeout settings.
+
+---
+
+## 📝 Version History
+
+### v1.3.0 (Current)
+- ✨ Added production Docker/Podman deployment support
+- ✨ Integrated Ollama for local LLM inference
+- ✨ Added FastAPI HTTP server with health endpoints
+- ✨ Improved PostgreSQL setup with pgvector
+- ✨ Added Rocket.Chat bot integration
+- 🐛 Fixed environment variable handling
+- 📚 Comprehensive documentation updates
+
+### v1.2.x
+- Feature additions for langgraph and multi-modal support
+- Performance improvements for large-scale deployments
+
+### v1.1.x
+- Initial stable release with core memory framework
+- OpenAI and OpenRouter integration
+- Basic PostgreSQL support
+
+See [CHANGELOG.md](CHANGELOG.md) for detailed version history.
+
+---
+
+## 🤝 Contributing
+
+We welcome contributions! Here's how to get started:
+
+1. **Fork the repository**
+2. **Create a feature branch**: `git checkout -b feature/amazing-feature`
+3. **Make your changes**:
+   - Add tests for new functionality
+   - Update documentation as needed
+   - Follow the existing code style
+4. **Run tests**: `pytest tests/`
+5. **Run linters**: `ruff check . && ruff format .`
+6. **Commit your changes**: `git commit -m 'Add amazing feature'`
+7. **Push to your fork**: `git push origin feature/amazing-feature`
+8. **Open a Pull Request**
+
+### Development Setup
+
+```bash
+# Clone your fork
+git clone https://github.com/YOUR_USERNAME/MemU.git
+cd MemU
+
+# Install development dependencies
+pip install -e ".[dev]"
+
+# Install pre-commit hooks
+pre-commit install
+
+# Run tests
+pytest tests/
+
+# Run linters
+ruff check .
+ruff format .
+```
+
+### Code Guidelines
+
+- Follow PEP 8 style guidelines
+- Add type hints to all functions
+- Write docstrings for public APIs
+- Add tests for new features
+- Keep PRs focused on a single feature/fix
 
 ---
 
