@@ -2,9 +2,9 @@
 FROM python:3.13-slim-bookworm AS builder
 
 # Install Rust toolchain
-RUN apt-get update && apt-get install -y --no-install-recommends 
-    build-essential 
-    curl 
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain stable
@@ -12,12 +12,12 @@ ENV PATH="/root/.cargo/bin:${PATH}"
 
 # Install uv (Python package manager)
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh
-ENV PATH="/root/.cargo/bin:/root/.uv/bin:${PATH}"
+ENV PATH="/root/.cargo/bin:/root/.local/bin:${PATH}"
 
 WORKDIR /app
 
-# Copy pyproject.toml and Cargo.toml first to leverage Docker cache
-COPY pyproject.toml uv.lock ./
+# Copy pyproject.toml, README.md and Cargo.toml first to leverage Docker cache
+COPY pyproject.toml uv.lock README.md ./
 COPY Cargo.toml Cargo.lock ./
 
 # Copy Rust source and Python source
@@ -25,9 +25,9 @@ COPY src ./src
 
 # Install maturin and then build the Rust extension and install Python dependencies
 RUN pip install maturin
-RUN maturin build --release --out target/wheels && 
-    uv pip install --system target/wheels/*.whl && 
-    uv pip install --system . --with dev
+RUN maturin build --release --out target/wheels && \
+    uv pip install --system target/wheels/*.whl && \
+    uv pip install --system .
 
 # Stage 2: Runtime image
 FROM python:3.13-slim-bookworm
