@@ -28,7 +28,7 @@ memU는 **사용자 의도를 지속적으로 캡처하고 이해**합니다. �
 
 ## 🤖 [OpenClaw (Moltbot, Clawdbot) Alternative](https://memu.bot)
 
-<img width="100%" src="https://github.com/NevaMind-AI/memU/blob/main/assets/memUbot.png" />
+<img width="100%" src="https://github.com/btafoya/MemU/blob/main/assets/memUbot.png" />
 
 - **Download-and-use and simple** to get started.
 - Builds long-term memory to **understand user intent** and act proactively.
@@ -77,7 +77,7 @@ memory/
 
 ## ⭐️ 리포지토리에 스타를
 
-<img width="100%" src="https://github.com/NevaMind-AI/memU/blob/main/assets/star.gif" />
+<img width="100%" src="https://github.com/btafoya/MemU/blob/main/assets/star.gif" />
 MemU가 유용하거나 흥미롭다면, GitHub Star ⭐️를 눌러주시면 큰 힘이 됩니다.
 
 ---
@@ -551,7 +551,7 @@ MemU는 모든 추론 작업에서 Locomo 벤치마크에서 **92.09% 평균 정
 
 <img width="100%" alt="benchmark" src="https://github.com/user-attachments/assets/6fec4884-94e5-4058-ad5c-baac3d7e76d9" />
 
-상세 실험 데이터 보기: [memU-experiment](https://github.com/NevaMind-AI/memU-experiment)
+상세 실험 데이터 보기: [memU-experiment](https://github.com/btafoya/MemU-experiment)
 
 ---
 
@@ -559,9 +559,9 @@ MemU는 모든 추론 작업에서 Locomo 벤치마크에서 **92.09% 평균 정
 
 | 리포지토리 | 설명 | 프로액티브 기능 |
 |-----------|------|----------------|
-| **[memU](https://github.com/NevaMind-AI/memU)** | 핵심 프로액티브 메모리 엔진 | 7×24 학습 파이프라인, 자동 분류 |
-| **[memU-server](https://github.com/NevaMind-AI/memU-server)** | 지속 동기화가 포함된 백엔드 | 실시간 메모리 업데이트, 웹훅 트리거 |
-| **[memU-ui](https://github.com/NevaMind-AI/memU-ui)** | 시각적 메모리 대시보드 | 라이브 메모리 진화 모니터링 |
+| **[memU](https://github.com/btafoya/MemU)** | 핵심 프로액티브 메모리 엔진 | 7×24 학습 파이프라인, 자동 분류 |
+| **[memU-server](https://github.com/btafoya/MemU-server)** | 지속 동기화가 포함된 백엔드 | 실시간 메모리 업데이트, 웹훅 트리거 |
+| **[memU-ui](https://github.com/btafoya/MemU-ui)** | 시각적 메모리 대시보드 | 라이브 메모리 진화 모니터링 |
 
 **빠른 링크:**
 - 🚀 [MemU Cloud 체험](https://app.memu.so/quick-start)
@@ -649,7 +649,7 @@ make check
 
 ## 🌍 커뮤니티
 
-- **GitHub Issues**: [버그 보고 및 기능 요청](https://github.com/NevaMind-AI/memU/issues)
+- **GitHub Issues**: [버그 보고 및 기능 요청](https://github.com/btafoya/MemU/issues)
 - **Discord**: [커뮤니티 참여](https://discord.com/invite/hQZntfGsbJ)
 - **X (Twitter)**: [@memU_ai 팔로우](https://x.com/memU_ai)
 - **연락처**: info@nevamind.ai

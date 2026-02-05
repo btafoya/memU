@@ -225,8 +225,8 @@ By contributing to MemU, you agree that:
 | Channel | Best For |
 |---------|----------|
 | 💬 [Discord](https://discord.gg/memu) | Real-time chat, quick questions |
-| 🗣️ [GitHub Discussions](https://github.com/NevaMind-AI/MemU/discussions) | Feature discussions, Q&A |
-| 🐛 [GitHub Issues](https://github.com/NevaMind-AI/MemU/issues) | Bug reports, feature requests |
+| 🗣️ [GitHub Discussions](https://github.com/btafoya/MemU/discussions) | Feature discussions, Q&A |
+| 🐛 [GitHub Issues](https://github.com/btafoya/MemU/issues) | Bug reports, feature requests |
 | 📧 [Email](mailto:contact@nevamind.ai) | Private inquiries |
 
 ## 🎉 Recognition
@@ -234,6 +234,6 @@ By contributing to MemU, you agree that:
 Contributors are recognized in:
 - README.md contributors section
 - Release notes for significant contributions
-- Our [Contributors](https://github.com/NevaMind-AI/MemU/graphs/contributors) page
+- Our [Contributors](https://github.com/btafoya/MemU/graphs/contributors) page
 
 Thank you for helping make MemU better! 🚀

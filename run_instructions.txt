@@ -1,0 +1,37 @@
+
+To build and run the memU project using Docker/Podman, follow these steps:
+
+1.  **Replace Placeholders**:
+    *   Open `docker-compose.yml` and replace `"YOUR_OPENAI_API_KEY"`, `"YOUR_OPENROUTER_API_KEY"` with your actual API keys.
+    *   (Optional) Adjust `OPENROUTER_BASE_URL` if you are using a custom OpenRouter instance.
+    *   `OLLAMA_API_BASE_URL` is set to `http://host.docker.internal:11434/api` in `docker-compose.yml`. This is to access an Ollama instance running directly on your host machine. If Ollama is running elsewhere (e.g., in another Docker container), you will need to adjust this accordingly.
+    *   `MEMU_DB_URL` is pre-configured to use the PostgreSQL container. If you wish to use an in-memory SQLite database instead for testing, you would set it to `"sqlite+pysqlite:///memu.db"`.
+
+2.  **Build the Docker Images**:
+    Navigate to the root of your `memU` project directory in your terminal and run:
+    ```bash
+    docker compose build
+    ```
+    This command will build both the `memu` application image and the `db` (PostgreSQL with pgvector) image.
+
+3.  **Run the memU and Database Containers**:
+    Once the images are built, you can start the services:
+    ```bash
+    docker compose up
+    ```
+    This will start both the `memU` server and the PostgreSQL database in containers. If you want to run them in the background, use:
+    ```bash
+    docker compose up -d
+    ```
+
+4.  **Access the Application**:
+    If `memu-server` exposes an HTTP API, it should be accessible on `http://localhost:8000` (or the port you configured).
+
+5.  **Stop the Containers**:
+    To stop the running containers, use:
+    ```bash
+    docker compose down
+    ```
+    This will stop and remove the containers and default networks. The `postgres_data` volume will persist.
+
+This setup provides an isolated environment for developing and running `memU` with a PostgreSQL database and `pgvector` extension.

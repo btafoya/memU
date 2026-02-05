@@ -12,6 +12,7 @@ from memu.llm.backends.base import LLMBackend
 from memu.llm.backends.doubao import DoubaoLLMBackend
 from memu.llm.backends.grok import GrokBackend
 from memu.llm.backends.openai import OpenAILLMBackend
+from memu.llm.backends.ollama import OllamaLLMBackend
 from memu.llm.backends.openrouter import OpenRouterLLMBackend
 
 
@@ -62,6 +63,13 @@ class _OpenRouterEmbeddingBackend(_EmbeddingBackend):
         return [cast(list[float], d["embedding"]) for d in data["data"]]
 
 
+class _OllamaEmbeddingBackend(_OpenAIEmbeddingBackend):
+    """Ollama uses OpenAI-compatible embedding API."""
+
+    name = "ollama"
+    embedding_endpoint = "/api/v1/embeddings"
+
+
 logger = logging.getLogger(__name__)
 
 LLM_BACKENDS: dict[str, Callable[[], LLMBackend]] = {
@@ -69,6 +77,7 @@ LLM_BACKENDS: dict[str, Callable[[], LLMBackend]] = {
     DoubaoLLMBackend.name: DoubaoLLMBackend,
     GrokBackend.name: GrokBackend,
     OpenRouterLLMBackend.name: OpenRouterLLMBackend,
+    OllamaLLMBackend.name: OllamaLLMBackend,
 }
 
 
@@ -248,6 +257,7 @@ class HTTPLLMClient:
             _DoubaoEmbeddingBackend.name: _DoubaoEmbeddingBackend,
             "grok": _OpenAIEmbeddingBackend,
             _OpenRouterEmbeddingBackend.name: _OpenRouterEmbeddingBackend,
+            _OllamaEmbeddingBackend.name: _OllamaEmbeddingBackend,
         }
         factory = backends.get(provider)
         if not factory:

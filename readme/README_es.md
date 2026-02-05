@@ -28,7 +28,7 @@ memU **captura y comprende continuamente la intención del usuario**. Incluso si
 
 ## 🤖 [OpenClaw (Moltbot, Clawdbot) Alternative](https://memu.bot)
 
-<img width="100%" src="https://github.com/NevaMind-AI/memU/blob/main/assets/memUbot.png" />
+<img width="100%" src="https://github.com/btafoya/MemU/blob/main/assets/memUbot.png" />
 
 - **Download-and-use and simple** to get started.
 - Builds long-term memory to **understand user intent** and act proactively.
@@ -77,7 +77,7 @@ Así como un sistema de archivos convierte bytes crudos en datos organizados, me
 
 ## ⭐️ Dale una estrella al repositorio
 
-<img width="100%" src="https://github.com/NevaMind-AI/memU/blob/main/assets/star.gif" />
+<img width="100%" src="https://github.com/btafoya/MemU/blob/main/assets/star.gif" />
 Si encuentras memU útil o interesante, te agradeceríamos mucho una estrella en GitHub ⭐️.
 
 ---
@@ -551,7 +551,7 @@ MemU alcanza **92.09% de precisión promedio** en el benchmark Locomo en todas l
 
 <img width="100%" alt="benchmark" src="https://github.com/user-attachments/assets/6fec4884-94e5-4058-ad5c-baac3d7e76d9" />
 
-Ver datos experimentales detallados: [memU-experiment](https://github.com/NevaMind-AI/memU-experiment)
+Ver datos experimentales detallados: [memU-experiment](https://github.com/btafoya/MemU-experiment)
 
 ---
 
@@ -559,9 +559,9 @@ Ver datos experimentales detallados: [memU-experiment](https://github.com/NevaMi
 
 | Repositorio | Descripción | Características Proactivas |
 |-------------|-------------|---------------------------|
-| **[memU](https://github.com/NevaMind-AI/memU)** | Motor principal de memoria proactiva | Pipeline de aprendizaje 7×24, auto-categorización |
-| **[memU-server](https://github.com/NevaMind-AI/memU-server)** | Backend con sincronización continua | Actualizaciones de memoria en tiempo real, triggers de webhook |
-| **[memU-ui](https://github.com/NevaMind-AI/memU-ui)** | Dashboard visual de memoria | Monitoreo de evolución de memoria en vivo |
+| **[memU](https://github.com/btafoya/MemU)** | Motor principal de memoria proactiva | Pipeline de aprendizaje 7×24, auto-categorización |
+| **[memU-server](https://github.com/btafoya/MemU-server)** | Backend con sincronización continua | Actualizaciones de memoria en tiempo real, triggers de webhook |
+| **[memU-ui](https://github.com/btafoya/MemU-ui)** | Dashboard visual de memoria | Monitoreo de evolución de memoria en vivo |
 
 **Enlaces Rápidos:**
 - 🚀 [Probar MemU Cloud](https://app.memu.so/quick-start)
@@ -649,7 +649,7 @@ Para guías detalladas de contribución, estándares de código y prácticas de 
 
 ## 🌍 Comunidad
 
-- **GitHub Issues**: [Reportar bugs y solicitar características](https://github.com/NevaMind-AI/memU/issues)
+- **GitHub Issues**: [Reportar bugs y solicitar características](https://github.com/btafoya/MemU/issues)
 - **Discord**: [Unirse a la comunidad](https://discord.com/invite/hQZntfGsbJ)
 - **X (Twitter)**: [Seguir @memU_ai](https://x.com/memU_ai)
 - **Contacto**: info@nevamind.ai

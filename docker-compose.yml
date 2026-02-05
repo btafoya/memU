@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  memu:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      # Replace with your actual OpenAI API Key
+      OPENAI_API_KEY: "YOUR_OPENAI_API_KEY"
+      # OpenRouter Environment Variables
+      OPENROUTER_API_KEY: "YOUR_OPENROUTER_API_KEY"
+      OPENROUTER_BASE_URL: "https://openrouter.ai/api/v1"
+      # Ollama Environment Variables
+      OLLAMA_API_BASE_URL: "http://host.docker.internal:11434/api" # Use host.docker.internal to access Ollama on the host machine
+      # Database URL for PostgreSQL.
+      MEMU_DB_URL: "postgresql+psycopg://postgres_user:postgres_password@db:5432/memu_db"
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+    # If memu-server is not the entrypoint, you can override the command here:
+    # command: ["memu-server"]
+
+  db:
+    build:
+      context: .
+      dockerfile: Dockerfile.postgres
+    environment:
+      POSTGRES_DB: memu_db
+      POSTGRES_USER: postgres_user
+      POSTGRES_PASSWORD: postgres_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+volumes:
+  postgres_data:

@@ -28,7 +28,7 @@ memUは**ユーザーの意図を継続的にキャプチャして理解**しま
 
 ## 🤖 [OpenClaw (Moltbot, Clawdbot) Alternative](https://memu.bot)
 
-<img width="100%" src="https://github.com/NevaMind-AI/memU/blob/main/assets/memUbot.png" />
+<img width="100%" src="https://github.com/btafoya/MemU/blob/main/assets/memUbot.png" />
 
 - **Download-and-use and simple** to get started.
 - Builds long-term memory to **understand user intent** and act proactively.
@@ -77,7 +77,7 @@ memory/
 
 ## ⭐️ リポジトリにスターを
 
-<img width="100%" src="https://github.com/NevaMind-AI/memU/blob/main/assets/star.gif" />
+<img width="100%" src="https://github.com/btafoya/MemU/blob/main/assets/star.gif" />
 memUが役立つまたは興味深いと思われた場合は、GitHub Star ⭐️をいただけると大変嬉しいです。
 
 ---
@@ -551,7 +551,7 @@ MemUは、すべての推論タスクでLocomoベンチマークで**92.09%の�
 
 <img width="100%" alt="benchmark" src="https://github.com/user-attachments/assets/6fec4884-94e5-4058-ad5c-baac3d7e76d9" />
 
-詳細な実験データを見る：[memU-experiment](https://github.com/NevaMind-AI/memU-experiment)
+詳細な実験データを見る：[memU-experiment](https://github.com/btafoya/MemU-experiment)
 
 ---
 
@@ -559,9 +559,9 @@ MemUは、すべての推論タスクでLocomoベンチマークで**92.09%の�
 
 | リポジトリ | 説明 | プロアクティブ機能 |
 |-----------|------|------------------|
-| **[memU](https://github.com/NevaMind-AI/memU)** | コアプロアクティブメモリエンジン | 7×24学習パイプライン、自動分類 |
-| **[memU-server](https://github.com/NevaMind-AI/memU-server)** | 継続同期を備えたバックエンド | リアルタイムメモリ更新、webhookトリガー |
-| **[memU-ui](https://github.com/NevaMind-AI/memU-ui)** | ビジュアルメモリダッシュボード | ライブメモリ進化モニタリング |
+| **[memU](https://github.com/btafoya/MemU)** | コアプロアクティブメモリエンジン | 7×24学習パイプライン、自動分類 |
+| **[memU-server](https://github.com/btafoya/MemU-server)** | 継続同期を備えたバックエンド | リアルタイムメモリ更新、webhookトリガー |
+| **[memU-ui](https://github.com/btafoya/MemU-ui)** | ビジュアルメモリダッシュボード | ライブメモリ進化モニタリング |
 
 **クイックリンク：**
 - 🚀 [MemU Cloudを試す](https://app.memu.so/quick-start)
@@ -649,7 +649,7 @@ make check
 
 ## 🌍 コミュニティ
 
-- **GitHub Issues**：[バグを報告 & 機能をリクエスト](https://github.com/NevaMind-AI/memU/issues)
+- **GitHub Issues**：[バグを報告 & 機能をリクエスト](https://github.com/btafoya/MemU/issues)
 - **Discord**：[コミュニティに参加](https://discord.com/invite/hQZntfGsbJ)
 - **X (Twitter)**：[@memU_ai をフォロー](https://x.com/memU_ai)
 - **お問い合わせ**：info@nevamind.ai

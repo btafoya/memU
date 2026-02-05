@@ -28,7 +28,7 @@ memU **持续捕获并理解用户意图**。即使没有明确指令，智能�
 
 ## 🤖 [OpenClaw (Moltbot, Clawdbot) Alternative](https://memu.bot)
 
-<img width="100%" src="https://github.com/NevaMind-AI/memU/blob/main/assets/memUbot.png" />
+<img width="100%" src="https://github.com/btafoya/MemU/blob/main/assets/memUbot.png" />
 
 - **Download-and-use and simple** to get started.
 - Builds long-term memory to **understand user intent** and act proactively.
@@ -77,7 +77,7 @@ memory/
 
 ## ⭐️ 给项目点个星
 
-<img width="100%" src="https://github.com/NevaMind-AI/memU/blob/main/assets/star.gif" />
+<img width="100%" src="https://github.com/btafoya/MemU/blob/main/assets/star.gif" />
 如果你觉得 memU 有用或有趣，请给项目点个星 ⭐️，这将是对我们最大的支持！
 
 ---
@@ -549,7 +549,7 @@ MemU 在 Locomo 基准测试中，在所有推理任务上实现了 **92.09% 的
 
 <img width="100%" alt="benchmark" src="https://github.com/user-attachments/assets/6fec4884-94e5-4058-ad5c-baac3d7e76d9" />
 
-查看详细实验数据：[memU-experiment](https://github.com/NevaMind-AI/memU-experiment)
+查看详细实验数据：[memU-experiment](https://github.com/btafoya/MemU-experiment)
 
 ---
 
@@ -557,9 +557,9 @@ MemU 在 Locomo 基准测试中，在所有推理任务上实现了 **92.09% 的
 
 | 仓库 | 描述 | 主动功能 |
 |------|------|----------|
-| **[memU](https://github.com/NevaMind-AI/memU)** | 核心主动记忆引擎 | 7×24 学习管道、自动分类 |
-| **[memU-server](https://github.com/NevaMind-AI/memU-server)** | 带持续同步的后端 | 实时记忆更新、webhook 触发 |
-| **[memU-ui](https://github.com/NevaMind-AI/memU-ui)** | 可视化记忆仪表板 | 实时记忆演化监控 |
+| **[memU](https://github.com/btafoya/MemU)** | 核心主动记忆引擎 | 7×24 学习管道、自动分类 |
+| **[memU-server](https://github.com/btafoya/MemU-server)** | 带持续同步的后端 | 实时记忆更新、webhook 触发 |
+| **[memU-ui](https://github.com/btafoya/MemU-ui)** | 可视化记忆仪表板 | 实时记忆演化监控 |
 
 **快速链接：**
 - 🚀 [试用 MemU 云服务](https://app.memu.so/quick-start)
@@ -647,7 +647,7 @@ make check
 
 ## 🌍 社区
 
-- **GitHub Issues**：[报告错误和请求功能](https://github.com/NevaMind-AI/memU/issues)
+- **GitHub Issues**：[报告错误和请求功能](https://github.com/btafoya/MemU/issues)
 - **Discord**：[加入社区](https://discord.com/invite/hQZntfGsbJ)
 - **X (Twitter)**：[关注 @memU_ai](https://x.com/memU_ai)
 - **联系方式**：info@nevamind.ai

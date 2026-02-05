@@ -1,0 +1,25 @@
+# Dockerfile.postgres
+# Uses an official Postgres image and installs the pgvector extension.
+
+FROM postgres:16-alpine
+
+# Install pgvector dependencies
+RUN apk add --no-cache 
+    build-base 
+    postgresql-dev 
+    git 
+    cmake 
+    llvm15-dev 
+    clang15
+
+# Clone pgvector, build, and install
+RUN git clone --branch v0.6.0 https://github.com/pgvector/pgvector.git /tmp/pgvector 
+    && cd /tmp/pgvector 
+    && make 
+    && make install 
+    && rm -rf /tmp/pgvector
+
+# Add a script to enable the pgvector extension on first run
+# This script will be executed when the container starts.
+COPY init-pgvector.sh /docker-entrypoint-initdb.d/init-pgvector.sh
+RUN chmod +x /docker-entrypoint-initdb.d/init-pgvector.sh

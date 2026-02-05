@@ -401,7 +401,7 @@ DATABASE_URL=postgresql://user:password@host:5432/memu
 
 ## Resources
 
-- [MemU Documentation](https://github.com/NevaMind-AI/memU)
+- [MemU Documentation](https://github.com/btafoya/MemU)
 - [Sealos DevBox Guide](https://sealos.io/blog/how-to-setup-devbox)
 - [FastAPI Documentation](https://fastapi.tiangolo.com)
 
