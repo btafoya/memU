@@ -3,6 +3,7 @@
 <div align="center">
 
 # memU
+A fork of https://github.com/NevaMind-AI/MemU
 
 ### 24/7 Always-On Proactive Memory for AI Agents
 
@@ -12,12 +13,6 @@
 [![Version](https://img.shields.io/badge/version-1.3.0-brightgreen.svg)](https://github.com/btafoya/MemU/releases)
 [![Docker](https://img.shields.io/badge/docker-ready-blue.svg)](https://github.com/btafoya/MemU/blob/main/docker-compose.yml)
 [![Ollama](https://img.shields.io/badge/Ollama-supported-orange.svg)](https://ollama.ai)
-[![Discord](https://img.shields.io/badge/Discord-Join%20Chat-5865F2?logo=discord&logoColor=white)](https://discord.gg/memu)
-[![Twitter](https://img.shields.io/badge/Twitter-Follow-1DA1F2?logo=x&logoColor=white)](https://x.com/memU_ai)
-
-<a href="https://trendshift.io/repositories/17374" target="_blank"><img src="https://trendshift.io/api/badge/repositories/17374" alt="NevaMind-AI%2FmemU | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
-
-**[English](readme/README_en.md) | [中文](readme/README_zh.md) | [日本語](readme/README_ja.md) | [한국어](readme/README_ko.md) | [Español](readme/README_es.md) | [Français](readme/README_fr.md)**
 
 </div>
 
