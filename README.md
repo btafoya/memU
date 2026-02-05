@@ -35,8 +35,7 @@ memU **continuously captures and understands user intent**. Even without a comma
 - [How Proactive Memory Works](#-how-proactive-memory-works)
 - [Memory Architecture](#️-hierarchical-memory-architecture)
 - [Quick Start](#-quick-start)
-  - [Cloud Version](#option-1-cloud-version)
-  - [Self-Hosted](#option-2-self-hosted)
+  - [Installation](#installation)
   - [Production Deployment](#production-deployment-with-dockerpodman)
 - [LLM Provider Integration](#llm-provider-integration)
   - [Ollama](#ollama-integration)
@@ -49,15 +48,31 @@ memU **continuously captures and understands user intent**. Even without a comma
 
 ---
 
-## 🤖 [OpenClaw (Moltbot, Clawdbot) Alternative](https://memu.bot)
+## 🤖 Self-Hosted Bot Integration
 
 <img width="100%" src="https://github.com/btafoya/MemU/blob/main/assets/memUbot.png" />
 
-- **Download-and-use and simple** to get started.
-- Builds long-term memory to **understand user intent** and act proactively.
-- **Cuts LLM token cost** with smaller context.
+Deploy your own AI bot with persistent memory:
 
-Try now: [memU bot](https://memu.bot)
+- **🚀 Self-hosted**: Complete control over your data and infrastructure
+- **🧠 Long-term memory**: Understands user intent and acts proactively
+- **💰 Cost efficient**: Cuts LLM token cost with smaller context
+- **🔌 Platform integrations**: Rocket.Chat, Discord, Slack (via adapters)
+
+**Rocket.Chat Integration**: Built-in bot for enterprise team collaboration
+```python
+from memu.integrations.rocketchat import RocketChatBot
+
+bot = RocketChatBot(
+    memory_service=service,
+    rocket_user="bot@example.com",
+    rocket_password="password",
+    rocket_url="https://chat.example.com"
+)
+await bot.run()
+```
+
+See [Rocket.Chat Integration Guide](src/memu/integrations/rocketchat/README.md) for setup instructions.
 
 ---
 
@@ -287,34 +302,7 @@ MemU's three-layer system enables both **reactive queries** and **proactive cont
 
 ## 🚀 Quick Start
 
-### Option 1: Cloud Version
-
-Experience proactive memory instantly:
-
-👉 **[memu.so](https://memu.so)** - Hosted service with 7×24 continuous learning
-
-For enterprise deployment with custom proactive workflows, contact **info@nevamind.ai**
-
-#### Cloud API (v3)
-
-| Base URL | `https://api.memu.so` |
-|----------|----------------------|
-| Auth | `Authorization: Bearer YOUR_API_KEY` |
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `POST` | `/api/v3/memory/memorize` | Register continuous learning task |
-| `GET` | `/api/v3/memory/memorize/status/{task_id}` | Check real-time processing status |
-| `POST` | `/api/v3/memory/categories` | List auto-generated categories |
-| `POST` | `/api/v3/memory/retrieve` | Query memory (supports proactive context loading) |
-
-📚 **[Full API Documentation](https://memu.pro/docs#cloud-version)**
-
----
-
-### Option 2: Self-Hosted
-
-#### System Requirements
+### System Requirements
 
 **Minimum**:
 - Python 3.13+
@@ -1016,9 +1004,9 @@ View detailed experimental data: [memU-experiment](https://github.com/btafoya/Me
 | **[memU-ui](https://github.com/btafoya/MemU-ui)** | Visual memory dashboard | Live memory evolution monitoring |
 
 **Quick Links:**
-- 🚀 [Try MemU Cloud](https://app.memu.so/quick-start)
-- 📚 [API Documentation](https://memu.pro/docs)
+- 📚 [Documentation](https://github.com/btafoya/MemU/blob/main/README.md)
 - 💬 [Discord Community](https://discord.gg/memu)
+- 🐛 [Report Issues](https://github.com/btafoya/MemU/issues)
 
 ---
 
@@ -1385,9 +1373,9 @@ ruff format .
 ## 🌍 Community
 
 - **GitHub Issues**: [Report bugs & request features](https://github.com/btafoya/MemU/issues)
+- **Discussions**: [Join discussions](https://github.com/btafoya/MemU/discussions)
 - **Discord**: [Join the community](https://discord.com/invite/hQZntfGsbJ)
 - **X (Twitter)**: [Follow @memU_ai](https://x.com/memU_ai)
-- **Contact**: info@nevamind.ai
 
 ---
 
