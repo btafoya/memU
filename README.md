@@ -315,6 +315,77 @@ See [`tests/test_inmemory.py`](tests/test_inmemory.py) and [`tests/test_postgres
 
 ---
 
+### Production Deployment with Docker/Podman
+
+Deploy memU in production using Docker Compose or Podman Compose with PostgreSQL and Ollama support:
+
+#### Prerequisites
+- Docker/Podman and Docker Compose/Podman Compose installed
+- Ollama instance running (local or remote)
+
+#### Quick Start
+
+1. **Configure environment variables**:
+```bash
+# Copy the example environment file
+cp .env.example .env
+
+# Edit .env and set your values:
+# - OLLAMA_API_BASE_URL: Your Ollama endpoint (e.g., http://192.168.25.165:11434/api)
+# - POSTGRES_PASSWORD: Strong password for database
+# - API keys if using OpenAI/OpenRouter
+```
+
+2. **Build and start services**:
+```bash
+# Using Docker Compose
+docker-compose up -d
+
+# Or using Podman Compose
+podman-compose up -d
+```
+
+3. **Verify deployment**:
+```bash
+# Check container status
+docker-compose ps  # or podman-compose ps
+
+# Test the API
+curl http://localhost:8000/
+curl http://localhost:8000/health
+```
+
+#### Services
+
+The deployment includes:
+- **memU Service** (port 8000): FastAPI server with health endpoints
+- **PostgreSQL** (port 5432): Database with pgvector extension
+- **Automatic healthchecks** and restart policies for production reliability
+
+#### Configuration
+
+The deployment is configured via environment variables in `.env`:
+
+| Variable | Description | Example |
+|----------|-------------|---------|
+| `OLLAMA_API_BASE_URL` | Ollama API endpoint | `http://192.168.25.165:11434/api` |
+| `POSTGRES_PASSWORD` | Database password | `your-strong-password` |
+| `OPENAI_API_KEY` | OpenAI API key (optional) | `sk-...` |
+| `OPENROUTER_API_KEY` | OpenRouter API key (optional) | `your-key` |
+| `MEMU_MEMORY_LIMIT` | Memory limit for memU container | `2g` |
+| `DB_MEMORY_LIMIT` | Memory limit for database | `1g` |
+
+See `.env.example` for all available options.
+
+#### Production Considerations
+
+- **Security**: Update default passwords in `.env` before deployment
+- **Backups**: The `postgres_data` volume contains your memory data
+- **Monitoring**: Check logs with `docker-compose logs -f` or `podman-compose logs -f`
+- **Updates**: Rebuild with `docker-compose build` or `podman-compose build` after code changes
+
+---
+
 ### Custom LLM and Embedding Providers
 
 MemU supports custom LLM and embedding providers beyond OpenAI. Configure them via `llm_profiles`:
